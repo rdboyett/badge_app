@@ -1,0 +1,16 @@
+
+      <div class="modal-header">
+	    {{userInfo.firstName|capfirst}}'s Badges
+      </div>
+      <div class="modal-body">
+	    {% if badgeUser.badges.all %}
+	      {% for badge in badgeUser.badges.all %}
+	    <a href="{{badge.link}}" title="{{badge.name|title}}" target="{{badge.name|title}}"><img src="{{badge.imageURL}}" alt="{{badge.name|title}}" width="100" style="width:100px;margin: 10px;"></a>
+	      {% endfor %}
+	    {% else %}
+	      Sorry, {{userInfo.firstName|capfirst}} {{userInfo.lastName|capfirst}} does not currently have a badge.
+	    {% endif %}
+      </div>
+      <div class="modal-footer">
+	  <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>

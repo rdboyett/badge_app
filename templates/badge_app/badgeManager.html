@@ -1,0 +1,217 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}AISD Directory Search{% endblock %}
+
+
+
+{% block body %}
+      <!-- column 2 -->	
+       <h3><i class="glyphicon glyphicon-certificate"></i> Badge Manager</h3>  
+            
+       <hr>
+      
+	   <div class="row">
+            <!-- center left-->	
+	 
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <div class="panel-title">
+	    <div class="pull-right">
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#createBadge">
+                  Create Badge
+                </button>
+                <button type="reset" class="btn btn-success" data-toggle="modal" data-target="#editBadge">
+                  Edit Badge
+                </button>
+	    </div>
+            <h4>Assign Badges</h4>
+          </div>
+        </div>
+        <div class="panel-body">
+          
+          <form id="badgeManagerForm" class="form form-vertical" action="{% url badge_app.views.awardBadge %}" method="post">{% csrf_token %}
+            <input id="addInput" type="hidden" name="addOrRemove" value="add">
+            <div class="control-group col-sm-6">
+              <label>Name</label>
+              <div class="controls">
+		<select name="name" class="form-control" selectcheck=true>
+			<option value="">Select One...</option>
+			{% if userInfo %}
+			  {% for user in userInfo %}
+			  <option value="{{user.id}}">{{user.firstName|capfirst}} {{user.lastName|capfirst}}</option>
+			  {% endfor %}
+			{% endif %}
+		</select>
+              </div>
+            </div>
+	    
+            <div class="control-group col-sm-6">
+              <label>Badge</label>
+              <div class="controls">
+		<select name="badge" class="form-control" selectcheck=true>
+			<option value="">Select One...</option>
+			{% if badges %}
+			  {% for badge in badges %}
+			  <option value="{{badge.id}}">{{badge.name|title}}</option>
+			  {% endfor %}
+			{% else %}
+			  <option value="">Please Create A Badge</option>
+			{% endif %}
+		</select>
+              </div>
+            </div>
+	    
+	    
+            <div class="control-group col-sm-12">
+              <label></label>
+              <div class="controls">
+                <button id="userBadges" type="button" class="btn btn-success" style="display: none;">
+                  View User's Badges
+                </button>
+                <button type="button" onclick="$('#addInput').val('remove');$('#badgeManagerForm').submit();" class="btn btn-danger disabled addRemoveBadges">
+                  Remove
+                </button>
+                <button type="button" onclick="$('#addInput').val('add');$('#badgeManagerForm').submit();" class="btn btn-primary disabled addRemoveBadges">
+                  Award
+                </button>
+              </div>
+            </div>   
+            
+          </form>
+          
+          
+        </div><!--/panel content-->
+      </div><!--/panel-->
+	 
+	 
+       </div><!--/row-->
+       
+       
+       
+       
+      <!-- **********************************************************************************************************************************************************
+      MODAL POPUPS
+      *********************************************************************************************************************************************************** -->
+
+
+
+       <!-- Create a Badge Modal -->
+<div class="modal fade" id="createBadge" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+	    Create a Badge...
+      </div>
+      <div class="modal-footer">
+	<form id="createBadgeForm" class="form" action="{% url badge_app.views.createBadge %}" method="post">{% csrf_token %}
+	  <div class="control-group">
+              <label class="pull-left">Name</label>
+              <div class="controls">
+                <input type="text" name="name" required="true" minlength="2" maxlength="45" class="form-control" placeholder="Badge Name...">
+              </div>
+            </div>
+	  <div class="control-group">
+              <label class="pull-left">Link</label>
+              <div class="controls">
+                <input type="url" name="link" noSpace="true" required="true" minlength="2" maxlength="200" class="form-control" placeholder="Badge Link...">
+              </div>
+            </div>
+	  <div class="control-group">
+              <label class="pull-left">Image URL</label>
+              <div class="controls">
+                <input type="url" name="imageurl" noSpace="true" required="true" minlength="2" maxlength="200" class="form-control" placeholder="Image Link...">
+              </div>
+            </div>
+	  <button type="button" class="btn btn-default" data-dismiss="modal" style="margin-top: 20px;">Cancel</button>
+	  <button type="submit" class="btn btn-danger" style="margin-top: 20px;">Create</button>
+	</form>
+      </div>
+    </div>
+  </div>
+</div>
+       
+       
+       <!-- Edit a Badge Modal -->
+<div class="modal fade" id="editBadge" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-body">
+	    Edit a Badge...
+      </div>
+      <div class="modal-footer">
+	<form id="editBadgeForm" class="form" action="{% url badge_app.views.editBadge %}" method="post">{% csrf_token %}
+	  
+            <div class="control-group">
+              <label class="pull-left">Select Badge to Edit</label>
+              <div class="controls">
+		<select name="badge" class="form-control" selectcheck=true>
+			<option value="">Select One...</option>
+			{% if badges %}
+			  {% for badge in badges %}
+			  <option value="{{badge.id}}">{{badge.name|title}}</option>
+			  {% endfor %}
+			{% else %}
+			  <option value="">Please Create A Badge</option>
+			{% endif %}
+		</select>
+              </div>
+            </div>
+	  <div class="control-group">
+              <label class="pull-left">Name</label>
+              <div class="controls">
+                <input type="text" name="name" required="true" minlength="2" maxlength="45" class="form-control" placeholder="Badge Name...">
+              </div>
+            </div>
+	  <div class="control-group">
+              <label class="pull-left">Link</label>
+              <div class="controls">
+                <input type="url" name="link" noSpace="true" required="true" minlength="2" maxlength="200" class="form-control" placeholder="Badge Link...">
+              </div>
+            </div>
+	  <div class="control-group">
+              <label class="pull-left">Image URL</label>
+              <div class="controls">
+                <input type="url" name="imageurl" noSpace="true" required="true" minlength="2" maxlength="200" class="form-control" placeholder="Badge Link...">
+              </div>
+            </div>
+	  <button type="button" class="btn btn-default" data-dismiss="modal" style="margin-top: 20px;">Cancel</button>
+	  <button type="submit" class="btn btn-danger" style="margin-top: 20px;">Change</button>
+	</form>
+      </div>
+    </div>
+  </div>
+</div>
+       
+
+
+
+
+       <!-- Display User's Badges Modal -->
+<div class="modal fade" id="displayBadges" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    </div>
+  </div>
+</div>
+       
+
+
+
+
+      <!-- **********************************************************************************************************************************************************
+      END OF MODAL POPUPS
+      *********************************************************************************************************************************************************** -->
+
+{% endblock %}
+
+
+
+{% block extraScript %}
+  <script>
+    var badgeInfoURL = "{% url badge_app.views.badgeInfo %}";
+    var badgeDisplayURL = "{% url badge_app.views.viewUserBadges %}";
+    
+  </script>
+  <script src="{% static "badge_app/badge.js" %}"></script>
+{% endblock %}
