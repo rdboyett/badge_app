@@ -10,7 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
 
 from directory_app.models import UserInfo, UserAdmin
-from badge_app.models import Badge, BadgeUser
+from badge_app.models import Badge, BadgeUser, Marquee, Quote
 from google_login.models import GoogleUserInfo
 
 
@@ -383,8 +383,40 @@ def getBadgesExtension(request):
         }
             
     return HttpResponse(json.dumps(data))
-            
 
+
+
+@csrf_exempt
+def getMarqueeExtension(request):
+    if Marquee.objects.all():
+        marquee = Marquee.objects.all()[0]
+
+        data = {'marquee':marquee.anouncement}
+
+
+    else:
+        data = {'marquee':''}
+
+    return HttpResponse(json.dumps(data))
+
+
+
+@csrf_exempt
+def getQuoteExtension(request):
+    if Quote.objects.all():
+        allQuotes = Quote.objects.all()
+
+        quotesList = []
+        for quote in allQuotes:
+            quotesList.append(quote.text)
+
+        data = {'quotes':quotesList}
+
+
+    else:
+        data = {'error':'Sorry, there is no quotes.'}
+
+    return HttpResponse(json.dumps(data))
 
 
 

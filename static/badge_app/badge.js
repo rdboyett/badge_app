@@ -89,7 +89,7 @@ $(document).ready(function(){
             if (responseText.success) {
                 //code
                 alert("Success");
-                location.reload();
+                //location.reload();
             }else{
                 alert(responseText.error);
             }

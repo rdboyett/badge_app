@@ -15,5 +15,7 @@ urlpatterns = patterns('badge_app.views',
     (r'^awardBadge/$', 'awardBadge'),
     (r'^viewUserBadges/$', 'viewUserBadges'),
     (r'^getBadgesExtension/$', 'getBadgesExtension'),
+    (r'^getMarqueeExtension/$', 'getMarqueeExtension'),
+    (r'^getQuoteExtension/$', 'getQuoteExtension'),
     
 )
